@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """create to substitute default django user"""
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -51,4 +51,27 @@ class User(AbstractBaseUser, PermissionsMixin):
 def set_default_name_from_email(sender, instance, **kwargs):
     if not instance.name:
         email = str(instance.email)
-        instance.name = email.split('.')[0]
+        instance.name = email
+
+
+class Blog(models.Model):
+    """
+    blog model.
+    user 1-m blog
+    """
+    title = models.CharField(max_length=255, unique=True)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               related_name='blogs', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['updated', 'created']
+
+    def __str__(self):
+        return self.title
+
+    def __unicode__(self):
+        return '%s' % self.title

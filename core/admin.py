@@ -10,7 +10,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (
             None,
-            {'fields': ('username', 'password')}
+            {'fields': ('email', 'password')}
         ),
         (
             _('Permissions'),
@@ -29,4 +29,5 @@ class UserAdmin(BaseUserAdmin):
     )
 
 
-admin.register(models.UserManager, UserAdmin)
+admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Blog)
