@@ -1,20 +1,20 @@
 # nested serializer for detail, and author's blog_list
-from rest_framework import serializers, generics, mixins
+from rest_framework import serializers
 
-from core.models import Blog
+from core.models import Blog, User
 
 
+# todo: list & manage blogs ,
+# todo: author filed auto assigned, can't edit
 class BlogSerializer(serializers.ModelSerializer):
     """
-    Serializer for blog objects.
+    Serializer for blog management.
     author: fk
     """
-
-    author = serializers.SerializerMethodField()
-
-    def get_author(self, blog):
-        return blog.author.name
+    author = serializers.SlugRelatedField(slug_field='name',
+                                          queryset=User.objects.all())
 
     class Meta:
         model = Blog
-        fields = ['id', 'title', 'body', 'created', 'updated', 'author']
+        fields = ('id', 'title', 'author', 'body', 'created', 'updated')
+        read_only_fields = ('id',)

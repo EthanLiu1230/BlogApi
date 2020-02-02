@@ -1,10 +1,9 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, \
     PermissionsMixin, BaseUserManager
-
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -45,6 +44,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return '%s' % self.name
 
 
 @receiver(pre_save, sender=User)
