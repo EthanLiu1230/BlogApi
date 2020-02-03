@@ -69,6 +69,7 @@ class Blog(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    # name would be 'author_id' in database
     author = models.ForeignKey(settings.AUTH_USER_MODEL,
                                related_name='blogs', on_delete=models.CASCADE)
 

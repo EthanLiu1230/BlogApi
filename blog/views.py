@@ -29,5 +29,8 @@ class ManageBlogViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        """Create a new recipe."""
+        """
+        Create a new recipe.
+        save current user to author
+        """
         serializer.save(author=self.request.user)
