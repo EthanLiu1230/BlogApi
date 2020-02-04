@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
@@ -11,7 +12,11 @@ class ReadOnlyBlogViewSet(viewsets.ReadOnlyModelViewSet):
     """Retrieve & List all blogs"""
     queryset = Blog.objects.all().order_by('-updated')
     serializer_class = BlogSerializer
+
     pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('title', 'body', 'author__name')
+    # ordering_fields = ('title', 'body',)
 
 
 class ManageBlogViewSet(viewsets.ModelViewSet):
@@ -24,7 +29,10 @@ class ManageBlogViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = BlogSerializer
+
     pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('title', 'body', 'author__name')
 
     def get_queryset(self):
         queryset = Blog.objects.all()
